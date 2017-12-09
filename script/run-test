@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+#time python -u src/train_test.py | tee log/train_test_stdout.log
+
+# time python src/filter_page_links_by_frequency.py
+# time python src/create_dictionary.py
+# time python src/create_corpus.py
+time python src/train_model.py
+
+ls -lh tmp/

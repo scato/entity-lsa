@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+# download and extract
+if [ ! -e page_links_nl.ttl ]; then
+  wget http://downloads.dbpedia.org/2016-10/core-i18n/nl/page_links_nl.ttl.bz2
+  bunzip2 -k page_links_nl.ttl.bz2
+fi
+
+# create sample
+head -n 1000000 page_links_nl.ttl > page_links_nl_sample.ttl
+
+# convert to csv
+pv page_links_nl_sample.ttl \
+  | grep "http://dbpedia.org/ontology/wikiPageWikiLink" \
+  | cut -d' ' -f1,3 \
+  | sed 's/<http:\/\/nl.dbpedia.org\/resource\//"/g' \
+  | sed 's/>/"/g' \
+  | sed 's/ \./"/g' \
+  | tr ' ' ',' \
+  > page_links_nl_sample.csv
+# pv page_links_nl.ttl \
+#   | grep "http://dbpedia.org/ontology/wikiPageWikiLink" \
+#   | cut -d' ' -f1,3 \
+#   | sed 's/<http:\/\/nl.dbpedia.org\/resource\//"/g' \
+#   | sed 's/>/"/g' \
+#   | sed 's/ \./"/g' \
+#   | tr ' ' ',' \
+#   > page_links_nl.csv

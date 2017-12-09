@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+# download and extract
+if [ ! -e page_links_wkd_uris_en.ttl ]; then
+  wget http://downloads.dbpedia.org/2016-10/core-i18n/en/page_links_wkd_uris_en.ttl.bz2
+  bunzip2 -k page_links_wkd_uris_en.ttl.bz2
+fi
+
+# create sample
+head -n 100000 page_links_wkd_uris_en.ttl > page_links_wkd_uris_en_sample.ttl
+
+# convert to csv
+pv page_links_wkd_uris_en_sample.ttl \
+  | grep "http://wikidata.dbpedia.org/ontology/wikiPageWikiLink" \
+  | cut -d' ' -f1,3 \
+  | sed 's/<http:\/\/wikidata\.dbpedia\.org\/resource\///g' \
+  | sed 's/>//g' \
+  | sed 's/ \.//g' \
+  | tr ' ' ',' \
+  > page_links_wkd_uris_en_sample.csv
+pv page_links_wkd_uris_en.ttl \
+  | grep "http://wikidata.dbpedia.org/ontology/wikiPageWikiLink" \
+  | cut -d' ' -f1,3 \
+  | sed 's/<http:\/\/wikidata\.dbpedia\.org\/resource\///g' \
+  | sed 's/>//g' \
+  | sed 's/ \.//g' \
+  | tr ' ' ',' \
+  > page_links_wkd_uris_en.csv

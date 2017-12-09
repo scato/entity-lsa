@@ -7,5 +7,6 @@ set -e
 # time python src/create_dictionary.py
 # time python src/create_corpus.py
 time python src/train_model.py
+time python src/present_model.py
 
 ls -lh tmp/

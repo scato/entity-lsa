@@ -1,9 +1,6 @@
 import logging
-from pprint import pprint
 
-from gensim import corpora, models, matutils
-import pandas as pd
-from scipy.sparse import dok_matrix
+from gensim import corpora, models
 
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -17,5 +14,5 @@ tfidf = models.TfidfModel(corpus)
 corpus_tfidf = tfidf[corpus]
 
 # train model
-lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=500)
-pprint(lsi.print_topics(10))
+lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=10)
+lsi.save('tmp/topic_model.lsi')

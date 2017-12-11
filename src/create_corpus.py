@@ -32,4 +32,8 @@ for corpus_key in corpus_keys:
 corpus_csc = corpus_dok.tocsc()
 corpus = matutils.Sparse2Corpus(corpus_csc)
 
-corpora.MmCorpus.serialize('tmp/page_links.mm', corpus)
+# control for DF
+tfidf = models.TfidfModel(corpus)
+corpus_tfidf = tfidf[corpus]
+
+corpora.MmCorpus.serialize('tmp/page_links.mm', corpus_tfidf)

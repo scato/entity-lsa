@@ -11,15 +11,18 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 raw_page_links = pd.read_csv('page_links_nl.csv', quotechar='\"', names=('from', 'to'), na_filter=False)
 page_links = raw_page_links.as_matrix()
 
-# remove pages with a DF less than 5
-frequency = defaultdict(int)
+# remove pages with an in degree of 1
+# and pages with an out degree of less than 5
+out_degree = defaultdict(int)
+in_degree = defaultdict(int)
 for page_link in page_links:
-    frequency[page_link[1]] += 1
+    out_degree[page_link[0]] += 1
+    in_degree[page_link[1]] += 1
 
 page_links = [
     page_link
     for page_link in page_links
-    if frequency[page_link[1]] >= 5
+    if out_degree[page_link[0]] > 1 and in_degree[page_link[1]] >= 5
 ]
 
 # write page links to CSV
